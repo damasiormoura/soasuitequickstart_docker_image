@@ -94,7 +94,8 @@ LABEL maintainer="Rodrigo Moura <rodrigo.moura@gmail.com>"
 # ----------------------------------------------------
 ENV ORACLE_HOME=/u01/oracle \
     USER_MEM_ARGS="-Djava.security.egd=file:/dev/./urandom" \
-    PATH=$PATH:${JAVA_HOME}/bin:/u01/oracle/oracle_common/common/bin:/u01/oracle/wlserver/common/bin
+    PATH=$PATH:${JAVA_HOME}/bin:/u01/oracle/oracle_common/common/bin:/u01/oracle/wlserver/common/bin\
+    PATH=$PATH:/u01/oracle/oracle_common/modules/org.apache.maven_3.2.5/bin
 
 # Setup subdirectory for FMW install package and container-dummy.sh
 # -----------------------------------------------------------------
@@ -102,13 +103,13 @@ RUN mkdir -p /u01 && \
     chmod a+xr /u01 && \
     useradd -b /u01 -d /u01/oracle -m -s /bin/bash oracle
 
-COPY --from=builder --chown=oracle:oracle /u01 /u01
+COPY --from=builder --chown=oracle:oracle /u01/oracle /u01/oracle
 
 #
 # Install the required packages
 # -----------------------------
 USER root
-RUN yum install -y hostname ant xorg-x11-apps && \
+RUN yum install -y hostname ant xorg-x11-apps vim nano && \
     rm -rf /var/cache/yum
 
 
