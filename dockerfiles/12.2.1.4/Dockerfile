@@ -40,7 +40,7 @@ ENV FMW_JAR1=fmw_12.2.1.4.0_soa_quickstart.jar \
 #
 # Copy installers and patches for install
 # -------------------------------------------
-ADD  install/$FMW_JAR1 install/$FMW_JAR2 /u01/
+ADD install/* /u01/
 RUN mkdir /u01/patches && \
     chown oracle:oracle -R /u01
 COPY patches/* /u01/patches/
@@ -50,10 +50,9 @@ RUN  cd /u01 && chmod 755 *.jar && \
 
 
 #
-# Copy files and packages for install
+# install
 # -----------------------------------
 USER oracle
-COPY install/* /u01/
 RUN cd /u01 && \
   $JAVA_HOME/bin/java -jar $FMW_JAR1 -silent -responseFile /u01/soasuite.response -invPtrLoc /u01/oraInst.loc -jreLoc $JAVA_HOME -ignoreSysPrereqs -force -novalidation ORACLE_HOME=$ORACLE_HOME
 
@@ -111,7 +110,6 @@ COPY --from=builder --chown=oracle:oracle /u01/oracle /u01/oracle
 USER root
 RUN yum install -y hostname ant xorg-x11-apps vim nano && \
     rm -rf /var/cache/yum
-
 
 
 #

@@ -5,6 +5,8 @@
 ### First run (Create the container)
 $ docker run --name my-soa-environment -ti --env DISPLAY=host.docker.internal:0.0 -v D:\HostSharedFolder:/mnt/host soaquickstart:12.2.1.4
 
+$ docker run -td --network InfraNET --name my-soa-environment --env DISPLAY=host.docker.internal:0.0 -v D:\HostSharedFolder:/mnt/host soaquickstart:12.2.1.4
+
 NOTES: If you are using a Windows Host, you need to install an X Terminal Server like Xming (http://www.straightrunning.com/XmingNotes/index.php).
        Substitute "D:\HostSharedFolder" for a local host directory to container have access. You can use this folder as persistent store for your project files.
 
