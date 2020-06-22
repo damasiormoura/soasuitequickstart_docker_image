@@ -1,0 +1,49 @@
+version: '3'
+services:
+  devdomain-db:
+    image: damasiormoura/database:12.2.0.1-ee
+    volumes:
+      - D:\devdom\db:/opt/oracle/oradata # persistent oracle database data.
+    ports:
+      - 1521:1521
+  devdomain-admin:
+    image: damasiormoura/soaquickstart:12.2.1.4
+    volumes:
+      - D:\devdom\user_projects:/u01/oracle/user_projects  
+    ports:
+      - 7001:7001
+    depends_on:
+      - "devdomain-db"
+    healthcheck:
+      test: "nc -z localhost 7001"
+      interval: 1s
+      retries: 120
+    command: ["container-scripts/wait-for-it.sh","devdomain-db:1521","--","user_projects/domains/dev_domain/bin/startWebLogic.sh"]
+  devdomain-osb_server1:
+    image: damasiormoura/soaquickstart:12.2.1.4
+    volumes:
+      - D:\devdom\user_projects:/u01/oracle/user_projects  
+    ports:
+      - 7004:7004
+    healthcheck:
+      test: "nc -z localhost 7004"
+      interval: 1s
+      retries: 120
+    depends_on:
+      - "devdomain-db"
+      - "devdomain-admin"
+    command: ["container-scripts/wait-for-admin.sh","http://devdomain-admin:7001/console","user_projects/domains/dev_domain/bin/startManagedWebLogic.sh","osb_server1","devdomain-admin:7001"]
+  devdomain-soa_server1:
+    image: damasiormoura/soaquickstart:12.2.1.4
+    volumes:
+      - D:\devdom\user_projects:/u01/oracle/user_projects  
+    ports:
+      - 7003:7003
+    healthcheck:
+      test: "nc -z localhost 7003"
+      interval: 1s
+      retries: 120
+    depends_on:
+      - "devdomain-db"
+      - "devdomain-admin"
+    command: ["container-scripts/wait-for-admin.sh","http://devdomain-admin:7001/console","user_projects/domains/dev_domain/bin/startManagedWebLogic.sh","soa_server1","devdomain-admin:7001"]

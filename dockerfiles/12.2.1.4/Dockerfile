@@ -10,7 +10,8 @@
 #
 # Pull base image
 # ---------------
-FROM oracle/serverjre:8 as builder
+#FROM oracle/serverjre:8 as builder
+FROM store/oracle/serverjre:1.8.0_241-b07 as builder
 
 # Maintainer
 # ----------
@@ -82,7 +83,8 @@ RUN patchzips=`ls /u01/patches/p*.zip 2>/dev/null`; \
 #
 # Rebuild from base image
 # -----------------------
-FROM oracle/serverjre:8
+# FROM oracle/serverjre:8
+FROM store/oracle/serverjre:1.8.0_241-b07
 
 #
 # Maintainer
