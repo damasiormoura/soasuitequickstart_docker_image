@@ -11,11 +11,10 @@
 # Pull base image
 # ---------------
 #FROM oracle/serverjre:8 as builder
-FROM store/oracle/serverjre:1.8.0_241-b07 as builder
+FROM oracle/serverjre:8 as builder
 
 # Maintainer
 # ----------
-MAINTAINER Rodrigo Moura <rodrigo.moura@gmail.com>
 
 
 # Common environment variables required for this build
@@ -84,7 +83,7 @@ RUN patchzips=`ls /u01/patches/p*.zip 2>/dev/null`; \
 # Rebuild from base image
 # -----------------------
 # FROM oracle/serverjre:8
-FROM store/oracle/serverjre:1.8.0_241-b07
+FROM oracle/serverjre:8
 
 #
 # Maintainer
@@ -104,7 +103,7 @@ RUN mkdir -p /u01 && \
     chmod a+xr /u01 && \
     useradd -b /u01 -d /u01/oracle -m -s /bin/bash oracle
 
-COPY --from=builder --chown=oracle:oracle /u01/oracle /u01/oracle
+COPY --from=builder --chown=oracle:oracle /u01 /u01/
 
 #
 # Install the required packages
